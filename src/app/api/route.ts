@@ -1,17 +1,12 @@
-import axios from 'axios'
 import { pokeApiURL } from '@/utils/consts'
+import { NextResponse } from 'next/server'
 
 export async function GET() {
   try {
-    const request = await axios.get(`${pokeApiURL}`)
-    const { results } = request.data
-    return new Response(JSON.stringify(results), {
-      headers: { 'Content-Type': 'application/json' }
-    })
+    const request = await fetch(`${pokeApiURL}`)
+    const data = await request.json()
+    return NextResponse.json(data.results)
   } catch (error) {
-    return new Response(JSON.stringify({ error: 'Failed to fetch data' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' }
-    })
+    return NextResponse.json({ error: 'Failed to fetch data' }, { status: 500 })
   }
 } 
